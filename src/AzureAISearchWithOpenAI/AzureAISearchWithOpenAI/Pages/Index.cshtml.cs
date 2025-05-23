@@ -9,14 +9,14 @@ namespace AzureAISearchWithOpenAI.Pages
         private readonly IConfiguration _configuration;
         private readonly ILogger<IndexModel> _logger;
         IAzureBlobService _BlobService;
-        //private readonly IAzureAISearchService _azureAIService;
+        private readonly IAzureAISearchService _azureAIService;
         public List<string> blobFileNames { get; set; } = new List<string>();
-        public IndexModel(ILogger<IndexModel> logger, IConfiguration configuration)
+        public IndexModel(ILogger<IndexModel> logger, IConfiguration configuration, IAzureAISearchService azureAIService)
         {
             _logger = logger;
             _configuration = configuration;
             _BlobService = new AzureBlobService(_configuration["Storage:ConnectionStr"], _configuration["Storage:Container"]);
-            //_azureAIService = azureAIService;
+            _azureAIService = azureAIService;
         }
 
         public void OnGet()
@@ -36,7 +36,7 @@ namespace AzureAISearchWithOpenAI.Pages
                 string uploadedFileName = _BlobService.UploadFile(file);
                 if (!string.IsNullOrEmpty(uploadedFileName))
                 {
-                    //bool isIndexerSuccess = _azureAIService.UpdateIndexer();
+                    bool isIndexerSuccess = _azureAIService.UpdateIndexer();
                 }
 
             }
